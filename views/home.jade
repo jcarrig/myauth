@@ -1,0 +1,62 @@
+- if (!everyauth.loggedIn)
+  - if ('undefined' !== typeof errors && errors.length)
+    ul#errors
+      - each error in errors
+        li.error= error
+  div.left
+    div#login-container.box.on  
+      form(action='/login', method='POST')
+        #login-login
+          input(type='text', name=everyauth.password.loginFormFieldName, placeholder="Email Address")
+        #login-password
+          input(type='password', name=everyauth.password.passwordFormFieldName, placeholder="Password")
+        #login-submit
+          button(value="Login") Login
+      #register
+        p don't have an account yet? 
+        a.register-link(href='/register') Register
+    div#register-container.box
+      form(action='/register', method='POST')
+        #register-login
+          input(type='text', name=everyauth.password.loginFormFieldName, placeholder="Email Address")
+        #register-password
+          input(type='password', name=everyauth.password.passwordFormFieldName, placeholder="Password")
+        #phone
+          input(type='text', name='phone', placeholder="Phone")
+        #first-name
+          input(type='text', name='name.first', placeholder="First Name")
+        #last-name
+          input(type='text', name='name.last', placeholder="Last Name")
+        #register-submit
+          button(value='Register') Register
+        #login
+          p already have an account?
+          a.login-link(href='/login') Login
+  div.right
+    p or you can login using 
+    #fb-login
+      a(href='/auth/facebook', style='border: 0px')
+        img(src='http://github.com/intridea/authbuttons/raw/master/png/facebook_64.png')
+    #twitter-login
+      a(href='/auth/twitter')
+        img(style='border: 0px', src='http://github.com/intridea/authbuttons/raw/master/png/twitter_64.png')
+- else
+  h2 Authenticated
+  #user-id Logged in with `user.id` #{user.id} - aka `everyauth.user.id` #{everyauth.user.id}
+  - if (everyauth.facebook)
+    h3 Facebook User Data
+    p= JSON.stringify(everyauth.facebook.user)
+  - if (everyauth.twitter)
+    h3 Twitter User Data
+    p= JSON.stringify(everyauth.twitter.user)
+  - if (everyauth.github)
+    h3 GitHub User Data
+    p= JSON.stringify(everyauth.github.user)
+  - if (everyauth.google)
+    h3 Google User Data
+    p= JSON.stringify(everyauth.google.user)
+  - if (everyauth.instagram)
+    h3 Instagram User Data
+    p= JSON.stringify(everyauth.instagram.user)
+  h3
+    a(href='/logout') Logout
