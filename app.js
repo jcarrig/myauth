@@ -4,7 +4,7 @@
  */
 
 var express = require('express');
-
+var util = require('util');
 var conf = require('./conf');
 
 var everyauth = require('everyauth')
@@ -22,6 +22,7 @@ var UserSchema = new Schema({})
 var mongooseAuth = require('mongoose-auth');
 
 var dburl = process.env['MONGOLAB_URI'] != null ? process.env['MONGOLAB_URI'] : 'mongodb://localhost:27017/myauth';
+var appurl = process.env['URL'] != null ? process.env['URL'] : 'http://localhost:3000';
 var dbconfig = require('./dbconfig.js').dbconfig(dburl);
 
 UserSchema.plugin(mongooseAuth, {
@@ -34,7 +35,7 @@ UserSchema.plugin(mongooseAuth, {
 	},
 	facebook: {
 		everyauth: {
-			myHostname: dbconfig.hostname,
+			myHostname: appurl,
 			appId: conf.fb.appId,
 			appSecret: conf.fb.appSecret,
 			redirectPath: '/'
@@ -42,7 +43,7 @@ UserSchema.plugin(mongooseAuth, {
 	},
 	twitter: {
 		everyauth: {
-			myHostname: dbconfig.hostname,
+			myHostname: appurl,
 			consumerKey: conf.twit.consumerKey,
 			consumerSecret: conf.twit.consumerSecret,
 			redirectPath: '/'
@@ -114,4 +115,5 @@ mongooseAuth.helpExpress(app);
 
 var port = process.env.PORT || 3000;
 app.listen(port);
+console.log(util.inspect(app));
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
